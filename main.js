@@ -74,21 +74,31 @@ function handle_addCartItem() {
     let product = this.parentElement;
     let title = product.querySelector(".product-title").innerHTML;
     let price = product.querySelector(".prix").innerHTML;
-    let imgSrc = product.querySelector(".card-image").src;
-    console.log(title, price, imgSrc);
+    // let imgSrc = product.querySelector(".card-image").src;
+    // console.log(title, price, imgSrc);
 
-    let newToAdd = {
-        title,
-        price,
-        imgSrc,
-    };
+    // let newToAdd = {
+    //     title,
+    //     price,
+    //     imgSrc,
+    // };
 
     //Add product to cart
-    let cartBoxElement = CartBoxComponent(title, price, imgSrc);
+    let cartBoxElement;
     let newNode = document.createElement("div");
-    newNode.innerHTML = cartBoxElement;
+
     const cartContent = cart.querySelector(".cart-content");
     cartContent.appendChild(newNode);
+    document.getElementById("bi").innerHTML += `
+    <div class = "cart-box ">
+       <img src = "" alt = " " class = "cart-img ">
+     <div class = "detail-box ">
+       <div class = "cart-product-title ">${title}</div>
+        <div class = "cart-price " >${price}</div>
+         <input type = "number" value = "1" class = "cart-quantity ">
+     </div>
+        <i class = 'bx bxs-trash-alt cart-remove' ></i>
+   </div> `
 }
 
 function handle_removerCartItems() {
@@ -120,16 +130,16 @@ function updateTotal() {
     totalElement.innerHTML = "DH" + total;
 }
 
-function CartBoxComponent(title, price, imgSrc) {
-    return `
-     < div class = "cart-box ">
-        <img src = "${imgSrc} alt = " " class = "cart-img ">
-      <div class = "detail-box ">
-        <div class = "cart-product-title ">${title}</div>
-         <div class = "cart-price " >${price}< /div>
-          <input type = "number" value = "1" class = "cart-quantity ">
-      </div>
-         <i class = 'bx bxs-trash-alt cart-remove' >< /i>
-    </div > `;
+// function CartBoxComponent(title, price, imgSrc) {
+//     return `
+//      < div class = "cart-box ">
+//         <img src = "${imgSrc} alt = " " class = "cart-img ">
+//       <div class = "detail-box ">
+//         <div class = "cart-product-title ">${title}</div>
+//          <div class = "cart-price " >${price}< /div>
+//           <input type = "number" value = "1" class = "cart-quantity ">
+//       </div>
+//          <i class = 'bx bxs-trash-alt cart-remove' >< /i>
+//     </div > `;
 
-}
+// }
