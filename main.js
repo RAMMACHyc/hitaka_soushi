@@ -20,11 +20,10 @@ document.querySelector("body > div.dash > div.dash-menu > a:nth-child(6)").addEv
     document.querySelector("body > div.dash > div:nth-child(6)").style.display = "flex";
 })
 
-
 //Cart
-let cartIcon = document.querySelector("#cart-icon");
-let cart = document.querySelector(".cart");
-let closeCart = document.querySelector("#close-cart");
+const cartIcon = document.querySelector("#cart-icon");
+const cart = document.querySelector(".cart");
+const closeCart = document.querySelector("#close-cart");
 // open Cart
 cartIcon.onclick = () => {
     cart.classList.add("active");
@@ -35,69 +34,102 @@ closeCart.onclick = () => {
 };
 //
 if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', ready);
+    document.addEventListener('DOMContentLoaded', start);
 } else {
-    ready();
+    start();
 }
+
+
+
 // Moking Function
-function ready() {
-    //Reomve Items Form cart
-    var reomveCartButtons = document.getElementsByClassName("cart-remove");
-    console.log(reomveCartButtons);
-    for (var i = 0; i < reomveCartButtons.length; i++) {
-        var button = reomveCartButtons[i];
-        button.addEventListener("click", removeCartItem);
-    }
-    // Quantity Changes
-    var quantityInputs = document.getElementsByClassName("cart-quantity");
-    for (var i = 0; i < quantityInputs.length; i++) {
-        var input = quantityInputs[i];
-        input.addEventListener("change", quantitychanged);
-    }
-    //add To Cart
-    var addCart = document.getElementsByClassName("shoping");
-    for (var i = 0; i < addCart.length; i++) {
-        button.addEventListener("click", addCartCliked);
-    }
+function start() {
+    addEvents();
 }
 
-// Reomve Items Form cart
-function removeCartItem(event) {
-    var buttonClicked = event.target;
-    buttonClicked.parenElement.remove();
-    updatetotal();
-}
-// Quantity changes
-function quantitychanged(event) {
-    var input = event.target;
-    if (isNaN(input.value) || input.value <= 0) {
-        input.value = 1;
-    }
-    updatetotal();
-}
-//add To cart
-function addCartCliked(event) {
-    var button = event.target;
-    var shopProducts = button.parenElement;
-    var title = shopProducts.getElementsByClassName('product-title')[0].innerText;
-    console.log(title);
+function update() {
+    addEvents();
+    updateTotal();
 }
 
+function addEvents() {
+    let cartRemove_btns = document.querySelectorAll('.cart-remove');
+    console.log(cartRemove_btns);
+    cartRemove_btns.forEach((btn) => {
+        btn.addEventListener("click", handle_removerCartItems);
 
-// Update Total
-function updatetotal() {
-    var cartContent = document.getElementsByClassName("cart-content")[0];
-    var cartBoxes = cartContent.getElementsByClassName("cart-box");
-    var total = 0;
-    for (var i = 0; i < reomveCartButtons.length; i++) {
-        var cartBox = cartBoxes[i];
-        var priceElement = cartBox.getElementsByClassName("cart-price")[0];
-        var quantityElement = cartBox.getElementsByClassName("cart-quantity")[0];
-        var price = parseFloat(priceElement.innerText.replace("DH", ""));
-        var quantity = quantityElement.value;
-        total = total + (price * quantity);
-        // if price contain some cents Value
-        total = Math.round(total * 100) / 100;
-        document.getElementsByClassName("total-price")[0].innerText = "DH" + total;
+    });
+    // change items quantiy
+    let cartQuantity_inputs = document.querySelectorAll('.cart-quantity');
+    cartQuantity_inputs.forEach(input => {
+        input.addEventListener("change", handle_changeItemQuantity);
+    });
+    //Add item to cart
+    let addCart_btns = document.querySelectorAll(".shoping");
+    addCart_btns.forEach(btn => {
+        btn.addEventListener("click", handle_addCartItem);
+    });
+}
+//========== HANDLE EVENTS FUNCTIONS=========
+function handle_addCartItem() {
+    let product = this.parentElement;
+    let title = product.querySelector(".product-title").innerHTML;
+    let price = product.querySelector(".prix").innerHTML;
+    let imgSrc = product.querySelector(".card-image").src;
+    console.log(title, price, imgSrc);
+
+    let newToAdd = {
+        title,
+        price,
+        imgSrc,
+    };
+
+    //Add product to cart
+    let cartBoxElement = CartBoxComponent(title, price, imgSrc);
+    let newNode = document.createElement("div");
+    newNode.innerHTML = cartBoxElement;
+    const cartContent = cart.querySelector(".cart-content");
+    cartContent.appendChild(newNode);
+}
+
+function handle_removerCartItems() {
+    this.parentElement.remove();
+
+    update();
+}
+
+function handle_changeItemQuantity() {
+    if (isNaN(this.value) || this.value < 1) {
+        this.value = 1;
     }
+    this.value = Math.floor(this.value); // to keep it integer
+
+    update();
+}
+
+function updateTotal() {
+    let cartBoxes = document.querySelectorAll('.cart-box');
+    const totalElement = cart.querySelector('.total-price');
+    let total = 0;
+    cartBoxes.forEach(cartBox => {
+        let priceElement = cartBox.querySelector('.cart-price');
+        let price = parseFloat(priceElement.innerHTML.replace("DH", ""));
+        let quantity = cartBox.querySelector(".cart-quantity").value;
+        total += price * quantity;
+    });
+    total = total.toFixed(2);
+    totalElement.innerHTML = "DH" + total;
+}
+
+function CartBoxComponent(title, price, imgSrc) {
+    return `
+     < div class = "cart-box ">
+        <img src = "${imgSrc} alt = " " class = "cart-img ">
+      <div class = "detail-box ">
+        <div class = "cart-product-title ">${title}</div>
+         <div class = "cart-price " >${price}< /div>
+          <input type = "number" value = "1" class = "cart-quantity ">
+      </div>
+         <i class = 'bx bxs-trash-alt cart-remove' >< /i>
+    </div > `;
+
 }
