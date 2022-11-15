@@ -1,3 +1,6 @@
+document.querySelector(".bx-menu").onclick = () => {
+    document.querySelector(".navbar").classList.toggle("active");
+};
 document.querySelector(".Best-seller").addEventListener("click", function() {
     document.querySelector("body > div.dash > div:nth-child(4)").style.display = "flex";
     document.querySelector("body > div.dash > div:nth-child(5)").style.display = "none";
@@ -32,14 +35,14 @@ cartIcon.onclick = () => {
 closeCart.onclick = () => {
     cart.classList.remove("active");
 };
+
+
 //
 if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', start);
 } else {
     start();
 }
-
-
 
 // Moking Function
 function start() {
