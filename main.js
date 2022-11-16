@@ -58,9 +58,10 @@ function addEvents() {
     let cartRemove_btns = document.querySelectorAll('.cart-remove');
     console.log(cartRemove_btns);
     cartRemove_btns.forEach((btn) => {
-        btn.addEventListener("click", handle_removerCartItems);
+        btn.addEventListener("click", handle_removerCartItems());
 
     });
+
     // change items quantiy
     let cartQuantity_inputs = document.querySelectorAll('.cart-quantity');
     cartQuantity_inputs.forEach(input => {
@@ -72,7 +73,7 @@ function addEvents() {
         btn.addEventListener("click", handle_addCartItem);
     });
 }
-//========== HANDLE EVENTS FUNCTIONS=========
+//HANDLE EVENTS FUNCTIONS
 function handle_addCartItem() {
     let product = this.parentElement;
     let title = product.querySelector(".product-title").innerHTML;
@@ -105,7 +106,7 @@ function handle_changeItemQuantity() {
     if (isNaN(this.value) || this.value < 1) {
         this.value = 1;
     }
-    this.value = Math.floor(this.value); // to keep it integer
+    this.value = Math.floor(this.value);
 
     update();
 }
