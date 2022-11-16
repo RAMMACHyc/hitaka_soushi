@@ -407,7 +407,7 @@
             top: 0%;
             right: -100%;
             width: 300px;
-            min-height: 100vh;
+            height: 100vh;
             padding: 20px;
             background-color: #ffffff;
             box-shadow: -2px 0 4px hsl(0 4% 15% / 10%);
