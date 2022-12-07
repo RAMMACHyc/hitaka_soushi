@@ -36,14 +36,18 @@ closeCart.onclick = () => {
     cart.classList.remove("active");
 };
 //
-if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-} else {
-    start();
-}
+// if (document.readyState == 'loading') {
+//     document.addEventListener('DOMContentLoaded', start);
+// } else {
+//     start();
+// }
 
 
 // FUNCTIONS
+// id.addEventListener('onchange', e => {
+//     var q = id.value;
+//     sum += q * prix;
+// })
 
 function addtocart(id) {
     var element = document.getElementsByClassName('dash-card')[id];
@@ -67,11 +71,49 @@ function addtocart(id) {
                 <div class="detail-box ">
                     <div class="cart-product-title ">${product.name}</div>
                     <div class="cart-price ">${product.prix}</div>
-                    <input type="number" value="1" class="cart-quantity ">
+                    <input type="number" value="1" class="cart-quantity" onchange="SetDefault(this.value,'${product.prix}')" min=0>
                 </div>
                 <i class='bx bxs-trash-alt cart-remove'></i>
     `;
     child.innerHTML = divProduct;
     var parent = document.getElementsByClassName("cart-content")[0];
     parent.appendChild(child);
+    CalculTotal();
+}
+
+function CalculTotal() {
+    var cart = document.getElementById('cart');
+    var prices = cart.getElementsByClassName('cart-price');
+    var total = 0;
+    for (var i = 0; i < prices.length; i++) {
+        var price = prices[i].innerHTML;
+        price = price.split("DH");
+        price = parseInt(price)
+        total += price;
+    }
+    var priceTotal = document.getElementById("total_price");
+    priceTotal.innerHTML = total + 'DH';
+}
+CalculTotal();
+
+function SetDefault(value, prix) {
+    prix = prix.split("DH");
+    prix = parseInt(prix)
+    var addPrice = value * prix;
+    var cart = document.getElementById('cart');
+    var prices = cart.getElementsByClassName('cart-price');
+    var total = 0;
+    for (var i = 0; i < prices.length; i++) {
+        var price = prices[i].innerHTML;
+        price = price.split("DH");
+        price = parseInt(price)
+        if (price == prix) {
+            total += addPrice;
+            prix = 0;
+        } else {
+            total += price;
+        }
+    }
+    var priceTotal = document.getElementById("total_price");
+    priceTotal.innerHTML = total + 'DH';
 }
